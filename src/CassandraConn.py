@@ -60,6 +60,17 @@ class CassandraConn :
         return self.session.execute(cql_command, extras)
 
 
+    def tableExists(self, table_name) :
+        c_sql = f"""
+                SELECT table_name
+                FROM system_schema.tables
+                WHERE keyspace_name='{self.keyspace}';
+                """
+
+        # Check if row with table name exists.
+        return any(table_name.lower() in row for row in self.execute(c_sql))
+
+
     def createTableUser(self) :
         c_sql = """
                 CREATE TABLE IF NOT EXISTS User (
@@ -79,8 +90,8 @@ class CassandraConn :
         self.execute(c_sql, params)
 
 
-    def getUserTable(self) :
-        c_sql = "SELECT * FROM User"
+    def getTable(self, table_name) :
+        c_sql = f"SELECT * FROM {table_name}"
 
         return self.execute(c_sql)
 
