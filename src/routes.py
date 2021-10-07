@@ -16,6 +16,7 @@ def create_table() :
     app.db.createTableUser()
     return "maybe"
 
+
 @api.route("/new", methods=['GET'], strict_slashes=False)
 def new_user() :
     app.db.createUser("ascalva", "alberto", "serrano")
@@ -27,6 +28,14 @@ def check() :
     def format_q(elt) :
         return f"{elt.uname} : {elt.fname} {elt.lname}"
 
-    res = app.db.getUserTable()
+    res = app.db.getTable("user")
 
     return jsonify([format_q(i) for i in res])
+
+
+@api.route("/checkT", methods=['GET'], strict_slashes=False)
+def check_table() :
+    name = "user"
+    res = app.db.tableExists(name)
+    return f"Table '{name}' exists: {res}"
+
