@@ -33,4 +33,4 @@ RUN chown -R cass_user:cass_user /app
 # Switch to non-root user after setup and installations.
 USER cass_user
 
-CMD ["python3", "flask_app.py"]
+# CMD ["python3", "flask_app.py"]

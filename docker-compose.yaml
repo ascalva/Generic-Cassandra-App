@@ -23,6 +23,7 @@ services:
         container_name: flask_app
         image: flask_app
         restart: always
+        command: sh -c "sleep 60; python3 flask_app.py"
         ports:
             - "5000:5000"
         volumes:
