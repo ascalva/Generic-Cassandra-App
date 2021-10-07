@@ -1,0 +1,43 @@
+version: "3.1"
+
+services:
+    database:
+        image: cassandra:latest
+        container_name: cassandra-1
+        restart: always
+        tty: true
+        ports:
+            - 9042:9042
+        networks:
+            - cass-net
+        environment:
+            CASSANDRA_START_RPC: "true"
+            CASSANDRA_CLUSTER_NAME: MyCluster
+            CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+            CASSANDRA_DC: datacenter
+
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: flask_app
+        image: flask_app
+        restart: always
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./:/app/
+        environment:
+            CASSANDRA_HOSTS: cassandra-1
+            TEST_VAR: one,two,three
+        tty: true
+        depends_on:
+            - "database"
+        links:
+            - "database"
+        networks:
+            - cass-net
+            
+networks:
+    cass-net:
+        external: false
