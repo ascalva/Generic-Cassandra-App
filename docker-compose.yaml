@@ -1,20 +1,39 @@
 version: "3.1"
 
+#
+# NOTE: Connect to a Cassandra node: 
+#       docker run -it --network cass-net --rm cassandra cqlsh <container-name>
+#
+
 services:
-    database:
+    cassandra-1:
         image: cassandra:latest
         container_name: cassandra-1
         restart: always
         tty: true
-        ports:
-            - 9042:9042
         networks:
             - cass-net
         environment:
-            CASSANDRA_START_RPC: "true"
-            CASSANDRA_CLUSTER_NAME: MyCluster
+            CASSANDRA_START_RPC:       "true"
+            CASSANDRA_CLUSTER_NAME:    MyCluster
             CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
-            CASSANDRA_DC: datacenter
+            CASSANDRA_DC:              datacenter
+
+    cassandra-2:
+        image: cassandra:latest
+        container_name: cassandra-2
+        restart: always
+        tty: true
+        depends_on:
+            - "cassandra-1"
+        networks:
+            - cass-net
+        environment:
+            CASSANDRA_START_RPC:       "true"
+            CASSANDRA_CLUSTER_NAME:    MyCluster
+            CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+            CASSANDRA_DC:              datacenter
+            CASSANDRA_SEEDS:           cassandra-1
 
     server:
         build:
@@ -23,6 +42,7 @@ services:
         container_name: flask_app
         image: flask_app
         restart: always
+        tty: true
         command: sh -c "sleep 60; python3 flask_app.py"
         ports:
             - "5000:5000"
@@ -31,14 +51,13 @@ services:
         environment:
             CASSANDRA_HOSTS: cassandra-1
             TEST_VAR: one,two,three
-        tty: true
         depends_on:
-            - "database"
-        links:
-            - "database"
+            - "cassandra-1"
         networks:
             - cass-net
             
 networks:
     cass-net:
         external: false
+
+
