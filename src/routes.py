@@ -5,26 +5,35 @@ from src   import app
 api = Blueprint("api", __name__, url_prefix="/")
 
 
+# All routes are test functions at the moment, mostly for testing
+# functionality and connectivity between server and Cassandra node(s).
 @api.route("/",      methods=['GET'], strict_slashes=False)
 @api.route("/index", methods=['GET'], strict_slashes=False)
 def index() :
-    return "hello world"
+    return "work in progress"
 
 
 @api.route("/createTable", methods=['GET'], strict_slashes=False)
 def create_table() :
     app.db.createTableUser()
-    return "maybe"
+    return "success"
 
 
-@api.route("/new", methods=['GET'], strict_slashes=False)
-def new_user() :
-    app.db.createUser("ascalva", "alberto", "serrano")
-    return "maybe"
+@api.route("/checkTable", methods=['GET'], strict_slashes=False)
+def check_table() :
+    name = "user"
+    res = app.db.tableExists(name)
+    return f"Table '{name}' exists: {res}"
 
 
-@api.route("/check", methods=['GET'], strict_slashes=False)
-def check() :
+@api.route("/new/<uname>/<fname>/<lname>", methods=['GET'], strict_slashes=False)
+def new_user(uname, fname, lname) :
+    app.db.createUser(uname, fname, lname)
+    return "success"
+
+
+@api.route("/getUsers", methods=['GET'], strict_slashes=False)
+def get_users() :
     def format_q(elt) :
         return f"{elt.uname} : {elt.fname} {elt.lname}"
 
@@ -32,10 +41,4 @@ def check() :
 
     return jsonify([format_q(i) for i in res])
 
-
-@api.route("/checkT", methods=['GET'], strict_slashes=False)
-def check_table() :
-    name = "user"
-    res = app.db.tableExists(name)
-    return f"Table '{name}' exists: {res}"
 
