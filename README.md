@@ -1,4 +1,4 @@
-## Simple Generic Flask Application Using Apache Cassandra ##
+## Flask Application Using Apache Cassandra ##
 
 ### Setup ###
 Starting the cluster of Cassandra nodes and Flask server can be done using the docker compose command (Cassandra nodes take about a minute to spin up.):
