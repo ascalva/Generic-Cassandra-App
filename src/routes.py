@@ -16,6 +16,7 @@ def index() :
 @api.route("/createTable", methods=['GET'], strict_slashes=False)
 def create_table() :
     app.db.createTableUser()
+    app.db.createTableMovie()
     return "success"
 
 
@@ -26,18 +27,18 @@ def check_table() :
     return f"Table '{name}' exists: {res}"
 
 
-@api.route("/new/<uname>/<fname>/<lname>", methods=['GET'], strict_slashes=False)
-def new_user(uname, fname, lname) :
-    app.db.createUser(uname, fname, lname)
+@api.route("/new/<fname>/<lname>/<role>", methods=['GET'], strict_slashes=False)
+def new_user(fname, lname, role) :
+    app.db.createUser(fname, lname, role)
     return "success"
 
 
 @api.route("/getUsers", methods=['GET'], strict_slashes=False)
 def get_users() :
     def format_q(elt) :
-        return f"{elt.uname} : {elt.fname} {elt.lname}"
+        return f"{elt.user_id} : {elt.fname} {elt.lname}"
 
-    res = app.db.getTable("user")
+    res = app.db.getTable("person")
 
     return jsonify([format_q(i) for i in res])
 

@@ -73,20 +73,31 @@ class CassandraConn :
 
     def createTableUser(self) :
         c_sql = """
-                CREATE TABLE IF NOT EXISTS User (
+                CREATE TABLE IF NOT EXISTS Person (
                     user_id uuid
-                    , uname varchar
                     , fname varchar
                     , lname varchar
+                    , role  varchar
                     , PRIMARY KEY (user_id));
                  """
         self.execute(c_sql)
 
 
-    def createUser(self, uname, fname, lname) :
-        c_sql  = "INSERT INTO User (user_id, uname, fname, lname) VALUES (%s,%s,%s,%s)"
+    def createTableMovie(self) :
+        c_sql = """
+                CREATE TABLE IF NOT EXISTS Movie (
+                    title      varchar
+                    , director varchar
+                    , year     int
+                    , PRIMARY KEY (title));
+                """
+        self.execute(c_sql)
+
+
+    def createUser(self, fname, lname, role) :
+        c_sql  = "INSERT INTO Person (user_id, fname, lname, role) VALUES (%s,%s,%s,%s)"
         uid    = uuid.uuid4()
-        params = [uid, uname, fname, lname]
+        params = [uid, fname, lname, role]
         self.execute(c_sql, params)
 
 
