@@ -13,23 +13,6 @@ def index() :
     return "Current funtion:<br> /createTable<br> /checkTable<br> /new/&lt;fname&gt;/&lt;lname&gt;/&lt;role&gt;<br> /newMovie/&lt;title&gt;/&lt;director&gt;/&lt;year&gt;<br> /getUsers<br> /getMovies<br>"
 
 
-# @api.route("/checkTable", methods=['GET'], strict_slashes=False)
-# def check_table() :
-#     name = "user"
-#     res = app.db.tableExists(name)
-#     return f"Table '{name}' exists: {res}"
-
-@api.route("/new/<fname>/<lname>/<role>", methods=['GET'], strict_slashes=False)
-def new_user(fname, lname, role) :
-    app.db.createPerson(fname, lname, role)
-    return "success"
-
-@api.route("/newMovie/<title>/<director>/<year>", methods=['GET'], strict_slashes=False)
-def new_movie(title , director, year) :
-    app.db.createMovie(title, director, year)
-    return "success"
-
-
 @api.route("/getUsers", methods=['GET'], strict_slashes=False)
 def get_users() :
     out_dic = {}
@@ -49,6 +32,19 @@ def get_movies() :
     return jsonify(out_dic)
 
 
+@api.route("/createPerson", methods=['GET', 'POST'], strict_slashes=False)
+def createPerson() :
+    if request.method == "POST" :
+        fname = request.form['fname']
+        lname = request.form['lname']
+        role  = request.form['role']
+
+        app.db.createPerson(fname, lname, role)
+        return "success"
+
+    return render_template("create_person.html")
+
+
 @api.route("/createMovie", methods=['GET', 'POST'], strict_slashes=False)
 def createMovie() :
     if request.method == "POST" :
@@ -60,3 +56,4 @@ def createMovie() :
         return "success"
 
     return render_template("create_movie.html")
+
