@@ -100,6 +100,12 @@ class CassandraConn :
         params = [uid, fname, lname, role]
         self.execute(c_sql, params)
 
+    def createMovie(self, title, director, year) :
+        year = int(year);
+        c_sql  = "INSERT INTO Movie (title, director, year) VALUES (%s,%s,%s)"
+        params = [title,director,int(year)]
+        self.execute(c_sql, params)
+
 
     def getTable(self, table_name) :
         c_sql = f"SELECT * FROM {table_name}"
