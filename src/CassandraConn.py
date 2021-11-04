@@ -11,6 +11,10 @@ class CassandraConn :
         self.session  = None
         self.keyspace = None
         self.hosts    = hosts
+        self.tables   = {
+            "person"  : self.createTableUser,
+            "movie"   : self.createTableMovie
+        }
 
         # Start session.
         self.createSession()
@@ -18,6 +22,10 @@ class CassandraConn :
         # Use supplied keyspace.
         if keyspace is not None :
             self.updateKeySpace(keyspace)
+
+        # Create tables if they don't exist yet.
+        for k,v in self.tables.items() :
+            if not self.tableExists(k) : v()
 
 
     def createSession(self) :
@@ -78,7 +86,7 @@ class CassandraConn :
                     , fname varchar
                     , lname varchar
                     , role  varchar
-                    , PRIMARY KEY (user_id));
+                    , PRIMARY KEY (fname, lname));
                  """
         self.execute(c_sql)
 
@@ -94,10 +102,15 @@ class CassandraConn :
         self.execute(c_sql)
 
 
-    def createUser(self, fname, lname, role) :
+    def createPerson(self, fname, lname, role) :
         c_sql  = "INSERT INTO Person (user_id, fname, lname, role) VALUES (%s,%s,%s,%s)"
         uid    = uuid.uuid4()
         params = [uid, fname, lname, role]
+        self.execute(c_sql, params)
+
+    def createMovie(self, movie_name, director, year) :
+        c_sql  = "INSERT INTO Movie (title, director, year) VALUES (%s,%s,%s)"
+        params = [movie_name, director, year]
         self.execute(c_sql, params)
 
 
