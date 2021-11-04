@@ -11,7 +11,6 @@ api = Blueprint("api", __name__, url_prefix="/")
 @api.route("/index", methods=['GET'], strict_slashes=False)
 def index() :
     return render_template("home.html")
-    # return "Current funtion:<br> /createTable<br> /checkTable<br> /new/&lt;fname&gt;/&lt;lname&gt;/&lt;role&gt;<br> /newMovie/&lt;title&gt;/&lt;director&gt;/&lt;year&gt;<br> /getUsers<br> /getMovies<br>"
 
 
 @api.route("/getUsers", methods=['GET'], strict_slashes=False)
