@@ -1,0 +1,12 @@
+<form action="{{ url_for('api.createMovie') }}" method="post">
+    <label for="movie_name">Movie Name:</label><br>
+    <input type="text" id="movie_name" name="movie_name"><br>
+
+    <label for="director">Director's Name:</label><br>
+    <input type="text" id="director" name="director"><br>
+
+    <label for="year">Year:</label><br>
+    <input type="text" id="year" name="year"><br>
+
+    <input type="submit">
+</form>
