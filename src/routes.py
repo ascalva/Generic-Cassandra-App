@@ -10,11 +10,12 @@ api = Blueprint("api", __name__, url_prefix="/")
 @api.route("/",      methods=['GET'], strict_slashes=False)
 @api.route("/index", methods=['GET'], strict_slashes=False)
 def index() :
-    return "Current funtion:<br> /createTable<br> /checkTable<br> /new/&lt;fname&gt;/&lt;lname&gt;/&lt;role&gt;<br> /newMovie/&lt;title&gt;/&lt;director&gt;/&lt;year&gt;<br> /getUsers<br> /getMovies<br>"
+    return render_template("home.html")
+    # return "Current funtion:<br> /createTable<br> /checkTable<br> /new/&lt;fname&gt;/&lt;lname&gt;/&lt;role&gt;<br> /newMovie/&lt;title&gt;/&lt;director&gt;/&lt;year&gt;<br> /getUsers<br> /getMovies<br>"
 
 
 @api.route("/getUsers", methods=['GET'], strict_slashes=False)
-def get_users() :
+def getUsers() :
     out_dic = {}
 
     for p in app.db.getTable("person") :
@@ -24,7 +25,7 @@ def get_users() :
 
 
 @api.route("/getMovies", methods=['GET'], strict_slashes=False)
-def get_movies() :
+def getMovies() :
     out_dic = {}
     for m in app.db.getTable("movie") :
         out_dic[m.title] = {"year" : m.year, "director" : m.director}
