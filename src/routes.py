@@ -10,7 +10,7 @@ api = Blueprint("api", __name__, url_prefix="/")
 @api.route("/",      methods=['GET'], strict_slashes=False)
 @api.route("/index", methods=['GET'], strict_slashes=False)
 def index() :
-    return "work in progress"
+    return "Current funtion:<br> /createTable<br> /checkTable<br> /new/&lt;fname&gt;/&lt;lname&gt;/&lt;role&gt;<br> /newMovie/&lt;title&gt;/&lt;director&gt;/&lt;year&gt;<br> /getUsers<br> /getMovies<br>"
 
 
 # @api.route("/checkTable", methods=['GET'], strict_slashes=False)
@@ -19,10 +19,14 @@ def index() :
 #     res = app.db.tableExists(name)
 #     return f"Table '{name}' exists: {res}"
 
-
 @api.route("/new/<fname>/<lname>/<role>", methods=['GET'], strict_slashes=False)
 def new_user(fname, lname, role) :
     app.db.createPerson(fname, lname, role)
+    return "success"
+
+@api.route("/newMovie/<title>/<director>/<year>", methods=['GET'], strict_slashes=False)
+def new_movie(title , director, year) :
+    app.db.createMovie(title, director, year)
     return "success"
 
 
@@ -56,4 +60,3 @@ def createMovie() :
         return "success"
 
     return render_template("create_movie.html")
-
