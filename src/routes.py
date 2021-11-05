@@ -23,6 +23,29 @@ def getUsers() :
     return jsonify(out_dic)
 
 
+@api.route("/getMovie", methods=['GET', 'POST'], strict_slashes=False)
+def getMovie() :
+    out_dic = {}
+    if request.method == "POST" :
+        movie_name = request.form['movie_name']
+        for m in app.db.getMovie(movie_name):
+            out_dic[m.title] = {"year": m.year, "director": m.director}
+        return jsonify(out_dic)
+
+    return render_template("get_movie.html")
+
+@api.route("/getPerson", methods=['GET', 'POST'], strict_slashes=False)
+def getPerson() :
+    out_dic = {}
+    if request.method == "POST" :
+        fname = request.form['fname']
+        lname = request.form['lname']
+        for p in app.db.getPerson(fname,lname):
+            out_dic[str(p.user_id)] = {"name" : f"{p.fname} {p.lname}", "role" : p.role}
+        return jsonify(out_dic)
+
+    return render_template("get_person.html")
+
 @api.route("/getMovies", methods=['GET'], strict_slashes=False)
 def getMovies() :
     out_dic = {}

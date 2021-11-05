@@ -113,6 +113,23 @@ class CassandraConn :
         params = [movie_name, director, year]
         self.execute(c_sql, params)
 
+    def getMovie(self,title):
+        c_sql = "SELECT * FROM Movie WHERE title = %s"
+        return self.execute(c_sql,[''.join(title)])
+
+    def getPerson(self,fname,lname):
+        fname = ''.join(fname)
+        lname = ''.join(lname)
+        if(fname == ""):
+            c_sql = "SELECT * FROM Person WHERE lname = %s ALLOW FILTERING"
+            param = [lname]
+        elif (lname == ""):
+            c_sql = "SELECT * FROM Person WHERE fname = %s ALLOW FILTERING"
+            param = [fname]
+        else:
+            c_sql = "SELECT * FROM Person WHERE fname = %s AND lname = %s ALLOW FILTERING"
+            param = [fname,lname]
+        return self.execute(c_sql,param)
 
     def getTable(self, table_name) :
         c_sql = f"SELECT * FROM {table_name}"
