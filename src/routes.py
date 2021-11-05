@@ -80,3 +80,23 @@ def createMovie() :
 
     return render_template("create_movie.html")
 
+@api.route("/removePerson", methods=['GET', 'POST'], strict_slashes=False)
+def removePerson() :
+    out_dic = {}
+    if request.method == "POST" :
+        fname = request.form['fname']
+        lname = request.form['lname']
+        app.db.removePerson(fname,lname)
+        return "success"
+
+    return render_template("remove_person.html")
+
+@api.route("/removeMovie", methods=['GET', 'POST'], strict_slashes=False)
+def removeMovie() :
+    out_dic = {}
+    if request.method == "POST" :
+        movie_name = request.form['movie_name']
+        app.db.removeMovie(movie_name)
+        return "success"
+
+    return render_template("remove_movie.html")

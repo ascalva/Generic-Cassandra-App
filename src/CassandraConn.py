@@ -131,6 +131,24 @@ class CassandraConn :
             param = [fname,lname]
         return self.execute(c_sql,param)
 
+    def removeMovie(self,title):
+        c_sql = "DELETE FROM Movie WHERE title = %s IF EXISTS"
+        return self.execute(c_sql,[''.join(title)])
+
+    def removePerson(self,fname,lname):
+        fname = ''.join(fname)
+        lname = ''.join(lname)
+        if(fname == ""):
+            c_sql = "DELETE FROM Person WHERE lname = %s IF EXISTS"
+            param = [lname]
+        elif (lname == ""):
+            c_sql = "DELETE FROM Person WHERE fname = %s IF EXISTS"
+            param = [fname]
+        else:
+            c_sql = "DELETE FROM Person WHERE fname = %s AND lname = %s IF EXISTS"
+            param = [fname,lname]
+        return self.execute(c_sql,param)
+
     def getTable(self, table_name) :
         c_sql = f"SELECT * FROM {table_name}"
 
