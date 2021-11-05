@@ -63,7 +63,7 @@ def createPerson() :
         role  = request.form['role']
 
         app.db.createPerson(fname, lname, role)
-        return "success"
+        return render_template("home.html")
 
     return render_template("create_person.html")
 
@@ -76,7 +76,7 @@ def createMovie() :
         year       = int(request.form['year'])
 
         app.db.createMovie(movie_name, director, year)
-        return "success"
+        return render_template("home.html")
 
     return render_template("create_movie.html")
 
@@ -87,7 +87,7 @@ def removePerson() :
         fname = request.form['fname']
         lname = request.form['lname']
         app.db.removePerson(fname,lname)
-        return "success"
+        return render_template("home.html")
 
     return render_template("remove_person.html")
 
@@ -97,6 +97,6 @@ def removeMovie() :
     if request.method == "POST" :
         movie_name = request.form['movie_name']
         app.db.removeMovie(movie_name)
-        return "success"
+        return render_template("home.html")
 
     return render_template("remove_movie.html")
